@@ -31,3 +31,6 @@ class Axes extends Struct {
   @Int()
   external int y;
 }
+
+typedef CreateButtonNative = Button Function();
+typedef CreateButtons = Button Function();

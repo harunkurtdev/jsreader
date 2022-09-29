@@ -3,10 +3,10 @@
 // BSD-style license that can be found in the LICENSE file.
 
 import 'dart:ffi';
-import 'dart:html';
+// import 'dart:html';
 import 'dart:io' show Directory, Platform;
 
-import 'package:ffi/ffi.dart';
+// import 'package:ffi/ffi.dart';
 import 'package:path/path.dart' as path;
 
 // Example of handling a simple C struct
@@ -70,8 +70,8 @@ typedef CreateCoordinate = Coordinate Function(
     double latitude, double longitude);
 
 // typedef CreateButtonNative = Button Function(Int number, Int value);
-typedef CreateButtonNative = Button Function(Button btn);
-typedef CreateButtons = Button Function(Button btn);
+typedef CreateButtonNative = Button Function();
+typedef CreateButtons = Button Function();
 
 typedef CreateAxesNative = Axes Function(Pointer<Axes> axes);
 typedef CreateAxes = Axes Function(Pointer<Axes> axes);
@@ -135,7 +135,6 @@ void main() {
 
   var btn = Button();
   while (true) {
-    final buttons = createButton(btn);
     // final axes = createAxes();
     print('button is number ${buttons.number}, value ${buttons.value}');
     print('axes is number ${axes.axis}, value x ${axes.x} ,value y ${axes.y} ');
