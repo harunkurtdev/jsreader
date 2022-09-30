@@ -10,18 +10,22 @@ import 'dart:io' show Directory, Platform;
 
 // Directory.current.path,
 
-class JoystickButton extends Stream {
+class JoystickButton extends getJoystick {
   // final buttons = createButton();
-  void getFiles() {
-    print(Directory.current.path);
+
+  late dynamic _createButton;
+  late int number;
+  late int value;
+
+  JoystickButton() {
+    this._createButton = this
+        .joystickLib
+        .lookupFunction<CreateButtonNative, CreateButtons>('button');
   }
 
-  @override
-  StreamSubscription listen(void Function(dynamic event)? onData,
-      {Function? onError, void Function()? onDone, bool? cancelOnError}) {
-    // TODO: implement listen
-
-    throw UnimplementedError();
+  void getButton() {
+    this.number = this._createButton().number;
+    this.value = this._createButton().value;
   }
 }
 
@@ -66,43 +70,36 @@ class getJoystick {
 typedef jsDevice = Pointer<Utf8> Function();
 
 void main() {
+  // final helloWorld =
+  //     dylib.lookupFunction<HelloWorld, HelloWorld>('hello_world');
+  // final message = helloWorld().toDartString();
+  // print(message);
+  // var dylib = getJoystick().joystickLib;
+  // final jsdevice = dylib.lookupFunction<jsDevice, jsDevice>('jsDevice');
+  // final messageJs = jsdevice().toDartString();
+  // print(messageJs);
   // var button = JoystickButton();
   // button.getFiles();
   // var libraryPath = path.join("./tool/sturct_library/build", 'libstructs.so');
   // print(libraryPath);
   // final dylib = DynamicLibrary.open(libraryPath);
-
-  // final helloWorld =
-  //     dylib.lookupFunction<HelloWorld, HelloWorld>('hello_world');
-  // final message = helloWorld().toDartString();
-  // print(message);
-  var dylib = getJoystick().joystickLib;
-  final jsdevice = dylib.lookupFunction<jsDevice, jsDevice>('jsDevice');
-  final messageJs = jsdevice().toDartString();
-  print(messageJs);
-  var joystickAxes = JoystickAxes();
-  // final createButton =
+// final createButton =
   //     dylib.lookupFunction<CreateButtonNative, CreateButtons>('button');
 
-  while (true) {
-    // final buttons = createButton(); print('button is number ${buttons.number}, value ${buttons.value}');
+  //----------------
 
-    // final axes = createAxes();
+  var joystickAxes = JoystickAxes();
+  var joystickButton = JoystickButton();
+
+  while (true) {
     joystickAxes.getAxes();
     print(
         'axes is number ${joystickAxes.axis}, value x ${joystickAxes.x} ,value y ${joystickAxes.y} ');
 
+    // joystickButton.getButton();
+    // print(
+    //     'button is number ${joystickButton.number}, value ${joystickButton.value}');
+
     Future.delayed(Duration(milliseconds: 100));
   }
-
-  // final createButton =
-  //     dylib.lookupFunction<CreateButtonNative, CreateButtons>('button');
-  // while (true) {
-  //   // print(button.createButton().number);
-  // }
-  // button.listen((event) {
-  //   print(event.number);
-  // });
-  // var awesome = Awesome();
-  // print('awesome: ${awesome.isAwesome}');
 }

@@ -95,8 +95,9 @@ struct axis_state axes(){
 
     js = open("/dev/input/js0", O_RDONLY);
 
-    while (read_event(js, &event) == 0)
-    {
+    // if (read_event(js, &event) == 0)
+    read_event(js, &event) 
+    // {
         switch (event.type)
         {
             // case JS_EVENT_BUTTON:
@@ -127,7 +128,7 @@ struct axis_state axes(){
         }
         
         fflush(stdout);
-    }
+    // }
 
     close(js);
 
@@ -145,8 +146,9 @@ struct buttons button(){
     js = open("/dev/input/js0", O_RDONLY);
     // js = open("/dev/input/js0", O_RDONLY);
     
-     while (read_event(js, &event) == 0)
-    {
+    //  if (read_event(js, &event) == 0)
+    read_event(js, &event)
+    // {
         // printf(js);
         switch (event.type)
         {
@@ -171,7 +173,7 @@ struct buttons button(){
         }
         
         fflush(stdout);
-    }
+    // }
 
     close(js);
 }
