@@ -10,10 +10,16 @@ import 'dart:io' show Directory, Platform;
 
 // Directory.current.path,
 
+class JSButton {
+  late int number;
+  late int value;
+}
+
 class JoystickButton extends getJoystick {
   // final buttons = createButton();
 
   late dynamic _createButton;
+  late JSButton _jsButton;
   late int number;
   late int value;
 
@@ -21,11 +27,21 @@ class JoystickButton extends getJoystick {
     this._createButton = this
         .joystickLib
         .lookupFunction<CreateButtonNative, CreateButtons>('button');
+    this._jsButton = JSButton();
   }
 
   void getButton() {
     this.number = this._createButton().number;
     this.value = this._createButton().value;
+  }
+
+  Stream<JSButton> listenButton() async* {
+    for (;;) {
+      this._jsButton.number = this._createButton().number;
+      this.._jsButton.value = this._createButton().value;
+
+      yield this._jsButton;
+    }
   }
 }
 
@@ -90,16 +106,19 @@ void main() {
 
   var joystickAxes = JoystickAxes();
   var joystickButton = JoystickButton();
+  joystickButton.listenButton().listen((event) {
+    print(event.number);
+    print(event.value);
+  });
+  // while (true) {
+  //   joystickAxes.getAxes();
+  //   print(
+  //       'axes is number ${joystickAxes.axis}, value x ${joystickAxes.x} ,value y ${joystickAxes.y} ');
 
-  while (true) {
-    joystickAxes.getAxes();
-    print(
-        'axes is number ${joystickAxes.axis}, value x ${joystickAxes.x} ,value y ${joystickAxes.y} ');
+  //   // joystickButton.getButton();
+  //   // print(
+  //   //     'button is number ${joystickButton.number}, value ${joystickButton.value}');
 
-    // joystickButton.getButton();
-    // print(
-    //     'button is number ${joystickButton.number}, value ${joystickButton.value}');
-
-    Future.delayed(Duration(milliseconds: 100));
-  }
+  //   Future.delayed(Duration(milliseconds: 100));
+  // }
 }
