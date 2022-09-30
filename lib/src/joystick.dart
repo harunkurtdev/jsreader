@@ -27,12 +27,20 @@ class JoystickButton extends Stream {
 
 class JoystickAxes extends getJoystick {
   late dynamic _createAxes;
+  late int axis;
+  late int x;
+  late int y;
+
   JoystickAxes() {
     _createAxes =
         this.joystickLib.lookupFunction<CreateAxesNative, CreateAxes>('axes');
   }
 
-  void getAxes() {}
+  void getAxes() {
+    this.axis = this._createAxes().axis;
+    this.x = this._createAxes().x;
+    this.y = this._createAxes().y;
+  }
 }
 
 class getJoystick {
@@ -72,15 +80,17 @@ void main() {
   final jsdevice = dylib.lookupFunction<jsDevice, jsDevice>('jsDevice');
   final messageJs = jsdevice().toDartString();
   print(messageJs);
-
-  final createButton =
-      dylib.lookupFunction<CreateButtonNative, CreateButtons>('button');
+  var joystickAxes = JoystickAxes();
+  // final createButton =
+  //     dylib.lookupFunction<CreateButtonNative, CreateButtons>('button');
 
   while (true) {
     // final buttons = createButton(); print('button is number ${buttons.number}, value ${buttons.value}');
 
-    final axes = createAxes();
-    print('axes is number ${axes.axis}, value x ${axes.x} ,value y ${axes.y} ');
+    // final axes = createAxes();
+    joystickAxes.getAxes();
+    print(
+        'axes is number ${joystickAxes.axis}, value x ${joystickAxes.x} ,value y ${joystickAxes.y} ');
 
     Future.delayed(Duration(milliseconds: 100));
   }
