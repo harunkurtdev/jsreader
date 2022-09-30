@@ -34,3 +34,6 @@ class Axes extends Struct {
 
 typedef CreateButtonNative = Button Function();
 typedef CreateButtons = Button Function();
+
+typedef CreateAxesNative = Axes Function();
+typedef CreateAxes = Axes Function();

@@ -6,7 +6,7 @@ import 'dart:ffi';
 // import 'dart:html';
 import 'dart:io' show Directory, Platform;
 
-// import 'package:ffi/ffi.dart';
+import 'package:ffi/ffi.dart';
 import 'package:path/path.dart' as path;
 
 // Example of handling a simple C struct

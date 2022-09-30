@@ -40,20 +40,20 @@ struct axis_state {
     int x, y;
 };
 
-size_t get_axis_state(struct js_event *event, struct axis_state *axes)
+struct axis_state get_axis_state(struct js_event *event, struct axis_state axes)
 {
     size_t axis = event->number / 2;
 
     if (axis < 3)
     {   
         if (event->number % 2 == 0)
-            axes->x = event->value;
+            axes.x = event->value;
         else
-            axes->y = event->value;
-        axes->axis=axis;
+            axes.y = event->value;
+        axes.axis=axis;
     }
 
-    return axis;
+    return axes;
 }
 
 size_t get_axis_count(int fd)
@@ -106,14 +106,14 @@ struct axis_state axes(){
             //     return button;
             //     break;
             case JS_EVENT_AXIS:
-                axis = get_axis_state(&event, &axes);
-                if (axis < 3)
-                    // printf("Axis %zu at (%6d, %6d)\n", axis, axes.x, axes.y);
+                axes = get_axis_state(&event, axes);
+                if (axes.axis < 3)
+                    // printf("Axis %zu at (%6d, %6d)\n", axes.axis, axes.x, axes.y);
                     // printf("Axis %zu \n",axis);
-                    axes.axis=axis;
-                    axes.x=axes.x;
-                    axes.y=axes.y;
-                    // return axes;
+                    // axes.axis=axis;
+                    // axes.x=axes.x;
+                    // axes.y=axes.y;
+                    return axes;
 
                     // axes.axis=axis;
                     // return axes;
