@@ -73,8 +73,8 @@ class JoystickAxes extends getJoystick {
   Stream<JSAxes> listenAxes() async* {
     for (;;) {
       this._jsAxes.axis = this._createAxes().axis;
-      this.._jsAxes.x = this._createButton().x;
-      this.._jsAxes.y = this._createButton().y;
+      this.._jsAxes.x = this._createAxes().x;
+      this.._jsAxes.y = this._createAxes().y;
 
       yield this._jsAxes;
     }
@@ -124,9 +124,14 @@ void main() {
 
   var joystickAxes = JoystickAxes();
   var joystickButton = JoystickButton();
-  joystickButton.listenButton().listen((event) {
-    print(event.number);
-    print(event.value);
+  // joystickButton.listenButton().listen((event) {
+  //   print(event.number);
+  //   print(event.value);
+  // });
+  joystickAxes.listenAxes().listen((event) {
+    print(event.axis);
+    print(event.x);
+    print(event.y);
   });
   // while (true) {
   //   joystickAxes.getAxes();
