@@ -15,6 +15,12 @@ class JSButton {
   late int value;
 }
 
+class JSAxes {
+  late int axis;
+  late int x;
+  late int y;
+}
+
 class JoystickButton extends getJoystick {
   // final buttons = createButton();
 
@@ -47,6 +53,7 @@ class JoystickButton extends getJoystick {
 
 class JoystickAxes extends getJoystick {
   late dynamic _createAxes;
+  late JSAxes _jsAxes;
   late int axis;
   late int x;
   late int y;
@@ -54,12 +61,23 @@ class JoystickAxes extends getJoystick {
   JoystickAxes() {
     _createAxes =
         this.joystickLib.lookupFunction<CreateAxesNative, CreateAxes>('axes');
+    this._jsAxes = JSAxes();
   }
 
   void getAxes() {
     this.axis = this._createAxes().axis;
     this.x = this._createAxes().x;
     this.y = this._createAxes().y;
+  }
+
+  Stream<JSAxes> listenAxes() async* {
+    for (;;) {
+      this._jsAxes.axis = this._createAxes().axis;
+      this.._jsAxes.x = this._createButton().x;
+      this.._jsAxes.y = this._createButton().y;
+
+      yield this._jsAxes;
+    }
   }
 }
 
