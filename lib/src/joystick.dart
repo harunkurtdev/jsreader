@@ -28,27 +28,51 @@ class JoystickButton extends getJoystick {
   late JSButton _jsButton;
   late int number;
   late int value;
+  late StreamController<JSButton> _streamControl;
 
   JoystickButton() {
     this._createButton = this
         .joystickLib
         .lookupFunction<CreateButtonNative, CreateButtons>('button');
     this._jsButton = JSButton();
-  }
+    this._streamControl = StreamController();
 
-  void getButton() {
-    this.number = this._createButton().number;
-    this.value = this._createButton().value;
-  }
-
-  Stream<JSButton> listenButton() async* {
-    for (;;) {
+    Timer.periodic(Duration(milliseconds: 1), (timer) {
       this._jsButton.number = this._createButton().number;
       this.._jsButton.value = this._createButton().value;
-
-      yield this._jsButton;
-    }
+      _streamControl.add(this._jsButton);
+      print(this._jsButton);
+    });
   }
+
+  Stream<JSButton> get listenButton => _streamControl.stream;
+}
+
+class Joystick extends getJoystick {
+  // final buttons = createButton();
+
+  late dynamic _createButton;
+  late JSButton _jsButton;
+  late int number;
+  late int value;
+  late StreamController<JSButton> _streamControl;
+
+  Joystick() {
+    this._createButton = this
+        .joystickLib
+        .lookupFunction<CreateJoystickNative, CreateJoystick>('axes');
+    this._jsButton = JSButton();
+    this._streamControl = StreamController();
+
+    Timer.periodic(Duration(milliseconds: 1), (timer) {
+      this._jsButton.number = this._createButton().axis;
+      this.._jsButton.value = this._createButton().x;
+      _streamControl.add(this._jsButton);
+      print(this._jsButton);
+    });
+  }
+
+  Stream<JSButton> get listenButton => _streamControl.stream;
 }
 
 class JoystickAxes extends getJoystick {
@@ -58,27 +82,27 @@ class JoystickAxes extends getJoystick {
   late int x;
   late int y;
 
+  late StreamController<JSAxes> _streamControl;
+
   JoystickAxes() {
-    _createAxes =
-        this.joystickLib.lookupFunction<CreateAxesNative, CreateAxes>('axes');
+    _createAxes = this
+        .joystickLib
+        .lookupFunction<CreateJoystickNative, CreateJoystick>('axes');
     this._jsAxes = JSAxes();
-  }
+    this._streamControl = StreamController();
+    Timer.periodic(Duration(milliseconds: 50), (timer) {
+      // this._jsAxes.number = this._createAxes().number;
+      // this.._jsButton.value = this._createAxes().value;
 
-  void getAxes() {
-    this.axis = this._createAxes().axis;
-    this.x = this._createAxes().x;
-    this.y = this._createAxes().y;
-  }
-
-  Stream<JSAxes> listenAxes() async* {
-    for (;;) {
       this._jsAxes.axis = this._createAxes().axis;
-      this.._jsAxes.x = this._createAxes().x;
-      this.._jsAxes.y = this._createAxes().y;
+      this.._jsAxes.x = this._createAxes().number;
+      this.._jsAxes.y = this._createAxes().state;
 
-      yield this._jsAxes;
-    }
+      _streamControl.add(this._jsAxes);
+    });
   }
+
+  Stream<JSAxes> get listenAxes => _streamControl.stream;
 }
 
 class getJoystick {
@@ -97,51 +121,23 @@ class getJoystick {
     }
     this.joystickLib = DynamicLibrary.open(libraryPath);
   }
-
-  // getJoystick get getLibrary {}
 }
 
 typedef jsDevice = Pointer<Utf8> Function();
 
 void main() {
-  // final helloWorld =
-  //     dylib.lookupFunction<HelloWorld, HelloWorld>('hello_world');
-  // final message = helloWorld().toDartString();
-  // print(message);
-  // var dylib = getJoystick().joystickLib;
-  // final jsdevice = dylib.lookupFunction<jsDevice, jsDevice>('jsDevice');
-  // final messageJs = jsdevice().toDartString();
-  // print(messageJs);
-  // var button = JoystickButton();
-  // button.getFiles();
-  // var libraryPath = path.join("./tool/sturct_library/build", 'libstructs.so');
-  // print(libraryPath);
-  // final dylib = DynamicLibrary.open(libraryPath);
-// final createButton =
-  //     dylib.lookupFunction<CreateButtonNative, CreateButtons>('button');
+  // var joystickAxes = JoystickAxes();
+  var joystickAxes = Joystick();
+  // var joystickButton = JoystickButton();
 
-  //----------------
-
-  var joystickAxes = JoystickAxes();
-  var joystickButton = JoystickButton();
-  // joystickButton.listenButton().listen((event) {
+  // joystickButton.listenButton.listen((event) {
   //   print(event.number);
   //   print(event.value);
   // });
-  joystickAxes.listenAxes().listen((event) {
-    print(event.axis);
-    print(event.x);
-    print(event.y);
+  joystickAxes.listenButton.listen((event) {
+    print(event.value);
+    print(event.number);
+    // print(event.x);
+    // print(event.y);
   });
-  // while (true) {
-  //   joystickAxes.getAxes();
-  //   print(
-  //       'axes is number ${joystickAxes.axis}, value x ${joystickAxes.x} ,value y ${joystickAxes.y} ');
-
-  //   // joystickButton.getButton();
-  //   // print(
-  //   //     'button is number ${joystickButton.number}, value ${joystickButton.value}');
-
-  //   Future.delayed(Duration(milliseconds: 100));
-  // }
 }
