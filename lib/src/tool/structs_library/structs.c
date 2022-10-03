@@ -84,73 +84,6 @@ struct joystickVal{
     
 };
 
-
-struct joystickState{
-    int axis;
-    int x,y;
-    int number;
-    int value;
-    int state;
-}
-
-
-struct joystickState joyjoy(){
-
-    struct joystickState state;
-    struct js_event event;
-    struct axis_state axes;
-    size_t axis;
-
-    int js;
-
-    js = open("/dev/input/js0", O_RDONLY);
-
-    // if (read_event(js, &event) == 0)
-    read_event(js, &event) 
-    // {
-        switch (event.type)
-        {
-            case JS_EVENT_BUTTON:
-                // printf("Button %u %s\n", event.number, event.value ? "pressed" : "released");
-                // button.number=event.number;
-                // button.value=event.value;
-
-                state.number=event.number;
-                state.value=event.value;
-                state.state=0;
-
-                return state;
-                break;
-            case JS_EVENT_AXIS:
-                axes = get_axis_state(&event, axes);
-                
-                if (axes.axis < 3)
-                    // printf("Axis %zu at (%6d, %6d)\n", axes.axis, axes.x, axes.y);
-                    // printf("Axis %zu \n",axis);
-                    // axes.axis=axis;
-                    // axes.x=axes.x;
-                    // axes.y=axes.y;
-
-                    state.axis=axes.axis;
-                    state.x=axes.x;
-                    state.y=axes.y;
-                    state.state=1;
-                    return state;
-
-                break;
-            default:
-                /* Ignore init events. */
-                break;
-        }
-        
-        fflush(stdout);
-    // }
-
-    close(js);
-
-}
-
-
 struct axis_state axes(){
 
     struct joystickState state;
@@ -173,9 +106,9 @@ struct axis_state axes(){
                 if (axes.axis < 3)
                     printf("Axis %zu at (%6d, %6d)\n", axes.axis, axes.x, axes.y);
                     // printf("Axis %zu \n",axis);
-                    // axes.axis=axis;
-                    // axes.x=axes.x;
-                    // axes.y=axes.y;
+                    axes.axis=axes.axis;
+                    axes.x=axes.x;
+                    axes.y=axes.y;
 
                     // state.axis=axes.axis;
                     // state.x=axes.x;
