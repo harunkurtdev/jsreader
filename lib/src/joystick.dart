@@ -13,6 +13,12 @@ import 'dart:io' show Directory, Platform;
 class JSButton {
   late int number;
   late int value;
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "Joystick is button number ${this.number} and value ${this.value}";
+  }
 }
 
 class JSAxes {
@@ -91,9 +97,8 @@ class JoystickAxes extends getJoystick {
   late StreamController<JSAxes> _streamControl;
 
   JoystickAxes() {
-    _createAxes = this
-        .joystickLib
-        .lookupFunction<CreateJoystickNative, CreateJoystick>('axes');
+    _createAxes =
+        this.joystickLib.lookupFunction<CreateAxesNative, CreateAxes>('axes');
     this._jsAxes = JSAxes();
     this._streamControl = StreamController();
     Timer.periodic(Duration(milliseconds: 50), (timer) {
@@ -101,8 +106,8 @@ class JoystickAxes extends getJoystick {
       // this.._jsButton.value = this._createAxes().value;
 
       this._jsAxes.axis = this._createAxes().axis;
-      this.._jsAxes.x = this._createAxes().number;
-      this.._jsAxes.y = this._createAxes().state;
+      this.._jsAxes.x = this._createAxes().x;
+      this.._jsAxes.y = this._createAxes().y;
 
       _streamControl.add(this._jsAxes);
       // print(this._jsAxes)
@@ -135,12 +140,12 @@ typedef jsDevice = Pointer<Utf8> Function();
 void main() {
   var joystickAxes = JoystickAxes();
   // var joystickAxes = Joystick();
-  // var joystickButton = JoystickButton();
+  var joystickButton = JoystickButton();
 
-  // joystickButton.listenButton.listen((event) {
-  //   print(event.number);
-  //   print(event.value);
-  // });
+  joystickButton.listenButton.listen((event) {
+    print(event.number);
+    print(event.value);
+  });
   joystickAxes.listenAxes.listen((event) {
     print(event.toString());
     // print(event.number);

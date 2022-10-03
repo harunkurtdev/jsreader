@@ -104,7 +104,7 @@ struct axis_state axes(){
                 axes = get_axis_state(&event, axes);
                 
                 if (axes.axis < 3)
-                    printf("Axis %zu at (%6d, %6d)\n", axes.axis, axes.x, axes.y);
+                    // printf("Axis %zu at (%6d, %6d)\n", axes.axis, axes.x, axes.y);
                     // printf("Axis %zu \n",axis);
                     axes.axis=axes.axis;
                     axes.x=axes.x;
