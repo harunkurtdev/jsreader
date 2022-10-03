@@ -151,7 +151,7 @@ struct joystickState joyjoy(){
 }
 
 
-struct joystickState axes(){
+struct axis_state axes(){
 
     struct joystickState state;
     struct js_event event;
@@ -167,40 +167,25 @@ struct joystickState axes(){
     {
         switch (event.type)
         {
-            case JS_EVENT_BUTTON:
-                // printf("Button %u %s\n", event.number, event.value ? "pressed" : "released");
-                // button.number=event.number;
-                // button.value=event.value;
-
-                state.number=event.number;
-                state.value=event.value;
-                state.axis=0;
-                state.x=0;
-                state.y=0;
-                // state.value=event.value;
-                state.state=0;
-
-                return state;
-                break;
             case JS_EVENT_AXIS:
                 axes = get_axis_state(&event, axes);
                 
                 if (axes.axis < 3)
-                    // printf("Axis %zu at (%6d, %6d)\n", axes.axis, axes.x, axes.y);
+                    printf("Axis %zu at (%6d, %6d)\n", axes.axis, axes.x, axes.y);
                     // printf("Axis %zu \n",axis);
                     // axes.axis=axis;
                     // axes.x=axes.x;
                     // axes.y=axes.y;
 
-                    state.axis=axes.axis;
-                    state.x=axes.x;
-                    state.y=axes.y;
-                    state.number=0;
-                    state.value=0;
+                    // state.axis=axes.axis;
+                    // state.x=axes.x;
+                    // state.y=axes.y;
+                    // state.number=0;
+                    // state.value=0;
                     
                 
-                    state.state=1;
-                    return state;
+                    // state.state=1;
+                    return axes;
 
                 break;
             default:
@@ -215,7 +200,7 @@ struct joystickState axes(){
 
 }
 
-// struct buttons button(){
+struct buttons button(){
     struct js_event event;
     struct buttons button;
 

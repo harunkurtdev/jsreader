@@ -19,6 +19,12 @@ class JSAxes {
   late int axis;
   late int x;
   late int y;
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return "Joystick is axis ${this.axis} , x ${this.x} and ${this.y} ";
+  }
 }
 
 class JoystickButton extends getJoystick {
@@ -48,32 +54,32 @@ class JoystickButton extends getJoystick {
   Stream<JSButton> get listenButton => _streamControl.stream;
 }
 
-class Joystick extends getJoystick {
-  // final buttons = createButton();
+// class Joystick extends getJoystick {
+//   // final buttons = createButton();
 
-  late dynamic _createButton;
-  late JSButton _jsButton;
-  late int number;
-  late int value;
-  late StreamController<JSButton> _streamControl;
+//   late dynamic _createButton;
+//   late JSButton _jsButton;
+//   late int number;
+//   late int value;
+//   late StreamController<JSButton> _streamControl;
 
-  Joystick() {
-    this._createButton = this
-        .joystickLib
-        .lookupFunction<CreateJoystickNative, CreateJoystick>('axes');
-    this._jsButton = JSButton();
-    this._streamControl = StreamController();
+//   Joystick() {
+//     this._createButton = this
+//         .joystickLib
+//         .lookupFunction<CreateJoystickNative, CreateJoystick>('axes');
+//     this._jsButton = JSButton();
+//     this._streamControl = StreamController();
 
-    Timer.periodic(Duration(milliseconds: 1), (timer) {
-      this._jsButton.number = this._createButton().axis;
-      this.._jsButton.value = this._createButton().x;
-      _streamControl.add(this._jsButton);
-      print(this._jsButton);
-    });
-  }
+//     Timer.periodic(Duration(milliseconds: 1), (timer) {
+//       this._jsButton.number = this._createButton().axis;
+//       this.._jsButton.value = this._createButton().x;
+//       _streamControl.add(this._jsButton);
+//       print(this._jsButton);
+//     });
+//   }
 
-  Stream<JSButton> get listenButton => _streamControl.stream;
-}
+//   Stream<JSButton> get listenButton => _streamControl.stream;
+// }
 
 class JoystickAxes extends getJoystick {
   late dynamic _createAxes;
@@ -99,6 +105,7 @@ class JoystickAxes extends getJoystick {
       this.._jsAxes.y = this._createAxes().state;
 
       _streamControl.add(this._jsAxes);
+      // print(this._jsAxes)
     });
   }
 
@@ -126,17 +133,17 @@ class getJoystick {
 typedef jsDevice = Pointer<Utf8> Function();
 
 void main() {
-  // var joystickAxes = JoystickAxes();
-  var joystickAxes = Joystick();
+  var joystickAxes = JoystickAxes();
+  // var joystickAxes = Joystick();
   // var joystickButton = JoystickButton();
 
   // joystickButton.listenButton.listen((event) {
   //   print(event.number);
   //   print(event.value);
   // });
-  joystickAxes.listenButton.listen((event) {
-    print(event.value);
-    print(event.number);
+  joystickAxes.listenAxes.listen((event) {
+    print(event.toString());
+    // print(event.number);
     // print(event.x);
     // print(event.y);
   });
