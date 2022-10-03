@@ -32,28 +32,28 @@ class Axes extends Struct {
   external int y;
 }
 
-class JoystickState extends Struct {
-  // Read Joystick Axes from read kernel Byte at This Struct
-  // with C language from joystick
+// class JoystickState extends Struct {
+//   // Read Joystick Axes from read kernel Byte at This Struct
+//   // with C language from joystick
 
-  @Int()
-  external int axis;
+//   @Int()
+//   external int axis;
 
-  @Int()
-  external int x;
+//   @Int()
+//   external int x;
 
-  @Int()
-  external int y;
+//   @Int()
+//   external int y;
 
-  @Int()
-  external int number;
+//   @Int()
+//   external int number;
 
-  @Int()
-  external int value;
+//   @Int()
+//   external int value;
 
-  @Int()
-  external int state;
-}
+//   @Int()
+//   external int state;
+// }
 
 typedef CreateButtonNative = Button Function();
 typedef CreateButtons = Button Function();
@@ -61,5 +61,5 @@ typedef CreateButtons = Button Function();
 typedef CreateAxesNative = Axes Function();
 typedef CreateAxes = Axes Function();
 
-typedef CreateJoystickNative = JoystickState Function();
-typedef CreateJoystick = JoystickState Function();
+// typedef CreateJoystickNative = JoystickState Function();
+// typedef CreateJoystick = JoystickState Function();
