@@ -95,11 +95,23 @@ struct axis_state axes(){
 
     js = open("/dev/input/js0", O_RDONLY);
 
-    if (read_event(js, &event) == 0)
-    // read_event(js, &event) 
+    while (true)
     {
+    read_event(js, &event) 
+    close(js);
+
+
         switch (event.type)
         {
+            case JS_EVENT_BUTTON:
+                printf("Button %u %s\n", event.number, event.value ? "pressed" : "released");
+                axes.axis=event.number;
+                axes.x=event.value;
+
+                axes.y=-1;
+                return axes;
+                
+                break;
             case JS_EVENT_AXIS:
                 axes = get_axis_state(&event, axes);
                 
@@ -123,13 +135,17 @@ struct axis_state axes(){
                 break;
             default:
                 /* Ignore init events. */
+                axes.axis=-1;
+                axes.x=-1;
+                axes.y=-1;
+                return button;
                 break;
         }
         
         fflush(stdout);
     }
 
-    close(js);
+    // close(js);
 
 }
 
@@ -145,17 +161,22 @@ struct buttons button(){
     js = open("/dev/input/js0", O_RDONLY);
     // js = open("/dev/input/js0", O_RDONLY);
     
-    //  if (read_event(js, &event) == 0)
+    // while (read_event(js, &event) == 0)
+    while (true)
+    {
     read_event(js, &event)
-    // {
+    close(js);
+    printf("Button %u %s\n", event.number, event.value ? "pressed" : "released");
+               
         // printf(js);
         switch (event.type)
         {
             case JS_EVENT_BUTTON:
-                // printf("Button %u %s\n", event.number, event.value ? "pressed" : "released");
+                printf("Button %u %s\n", event.number, event.value ? "pressed" : "released");
                 button.number=event.number;
                 button.value=event.value;
                 return button;
+                
                 
                 break;
             // case JS_EVENT_AXIS:
@@ -168,13 +189,15 @@ struct buttons button(){
             //     break;
             default:
                 /* Ignore init events. */
+                button.number=-1;
+                button.number=-1;
+                return button;
                 break;
         }
         
         fflush(stdout);
-    // }
+    }
 
-    close(js);
 }
 
 int main()

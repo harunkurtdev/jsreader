@@ -8,7 +8,30 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'dart:io' show Directory, Platform;
 
+import 'package:async/async.dart' show StreamGroup;
 // Directory.current.path,
+
+class JS_Stream {
+  late JoystickAxes _joystickAxes;
+  late JoystickButton _joystickButton;
+  late StreamController _streamController;
+
+  JS_Stream() {
+    _joystickAxes = JoystickAxes();
+    _joystickButton = JoystickButton();
+    _streamController = StreamController();
+    // Timer.periodic(Duration(milliseconds: 1), (timer) {
+    //   _joystickAxes.listenAxes.listen((event) {});
+    // });
+    Timer.periodic(Duration(milliseconds: 1), (timer) {
+      // _joystickAxes.listenAxes.listen((event) {
+      _joystickButton.listenButton.listen((event) {
+        print(event.toString());
+      });
+      // });
+    });
+  }
+}
 
 class JSButton {
   late int number;
@@ -50,44 +73,19 @@ class JoystickButton extends getJoystick {
     this._streamControl = StreamController();
 
     Timer.periodic(Duration(milliseconds: 1), (timer) {
+      // while (timer.isActive) {
       this._jsButton.number = this._createButton().number;
       this.._jsButton.value = this._createButton().value;
+      // _streamControl.onResume;
       _streamControl.add(this._jsButton);
-      print(this._jsButton);
+      // }
     });
   }
 
   Stream<JSButton> get listenButton => _streamControl.stream;
 }
 
-// class Joystick extends getJoystick {
-//   // final buttons = createButton();
-
-//   late dynamic _createButton;
-//   late JSButton _jsButton;
-//   late int number;
-//   late int value;
-//   late StreamController<JSButton> _streamControl;
-
-//   Joystick() {
-//     this._createButton = this
-//         .joystickLib
-//         .lookupFunction<CreateJoystickNative, CreateJoystick>('axes');
-//     this._jsButton = JSButton();
-//     this._streamControl = StreamController();
-
-//     Timer.periodic(Duration(milliseconds: 1), (timer) {
-//       this._jsButton.number = this._createButton().axis;
-//       this.._jsButton.value = this._createButton().x;
-//       _streamControl.add(this._jsButton);
-//       print(this._jsButton);
-//     });
-//   }
-
-//   Stream<JSButton> get listenButton => _streamControl.stream;
-// }
-
-class JoystickAxes extends getJoystick {
+class JoystickAxes extends getAxesJoystick {
   late dynamic _createAxes;
   late JSAxes _jsAxes;
   late int axis;
@@ -104,12 +102,19 @@ class JoystickAxes extends getJoystick {
     Timer.periodic(Duration(milliseconds: 50), (timer) {
       // this._jsAxes.number = this._createAxes().number;
       // this.._jsButton.value = this._createAxes().value;
-
-      this._jsAxes.axis = this._createAxes().axis;
-      this.._jsAxes.x = this._createAxes().x;
-      this.._jsAxes.y = this._createAxes().y;
-
-      _streamControl.add(this._jsAxes);
+      print("bizde sıra");
+      var a = this._createAxes().axis;
+      print("value");
+      if (a != null) {
+        this._jsAxes.axis = a;
+        this.._jsAxes.x = this._createAxes().x;
+        this.._jsAxes.y = this._createAxes().y;
+        print(_jsAxes.toString());
+        _streamControl.add(this._jsAxes);
+      } else {
+        print("veri gelmiyor");
+        _streamControl.onResume;
+      }
       // print(this._jsAxes)
     });
   }
@@ -119,6 +124,7 @@ class JoystickAxes extends getJoystick {
 
 class getJoystick {
   late DynamicLibrary joystickLib;
+  // late DynamicLibrary joystickAxesLib;
 
   getJoystick() {
     var libraryPath =
@@ -131,25 +137,32 @@ class getJoystick {
       libraryPath = path.join(
           Directory.current.path, 'structs_library', 'Debug', 'structs.dll');
     }
-    this.joystickLib = DynamicLibrary.open(libraryPath);
+    this.joystickLib = new DynamicLibrary.open(libraryPath);
+    // this.joystickAxesLib = new DynamicLibrary.open(libraryPath);
   }
 }
 
 typedef jsDevice = Pointer<Utf8> Function();
 
 void main() {
-  var joystickAxes = JoystickAxes();
-  // var joystickAxes = Joystick();
+  // var joystickAxes = JoystickAxes();
   var joystickButton = JoystickButton();
 
+  // var jsStream = JS_Stream();
+
   joystickButton.listenButton.listen((event) {
-    print(event.number);
-    print(event.value);
-  });
-  joystickAxes.listenAxes.listen((event) {
     print(event.toString());
-    // print(event.number);
-    // print(event.x);
-    // print(event.y);
   });
+  // joystickAxes.listenAxes;
+  // StreamGroup.merge(streams)
+
+  // StreamGroup streamGroup = StreamGroup<dynamic>.merge(
+  //     [joystickAxes.listenAxes, joystickButton.listenButton]);
+  // joystickAxes.listenAxes.listen((event) {
+  //   print(event.toString());
+  // });
+
+  // streamGroup.stream.listen((event) {
+  //   print(event.runtimeType);
+  // });
 }
