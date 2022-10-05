@@ -6,7 +6,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include "structs.h"
+// #include "structs.h"
 
 
 #include <fcntl.h>
@@ -18,7 +18,7 @@ int read_event(int fd, struct js_event *event)
     ssize_t bytes;
 
     bytes = read(fd, event, sizeof(*event));
-
+    // printf("%d",*event);
     if (bytes == sizeof(*event))
         return 0;
 
@@ -70,194 +70,116 @@ char *jsDevice(){
     return "/dev/input/js0";
 }
 
-
-
 struct buttons{
     int number;
     int value;
 };
 
 
-struct joystickVal{
-    int number;
-    int value;
+// struct axis_state axes(){
+
+//     struct js_event event;
+//     struct axis_state axes;
+//     int js;
+
+//     js = open("/dev/input/js0", O_RDONLY);
+
+//     while (read_event(js, &event) ==0)
+//     {
     
-};
+//         switch (event.type)
+//         {
+//             case JS_EVENT_AXIS:
+//                 axes = get_axis_state(&event, axes);
+                
+//                 if (axes.axis < 3)
+//                     // printf("Axis %zu at (%6d, %6d)\n", axes.axis, axes.x, axes.y);
+//                     axes.axis=axes.axis;
+//                     axes.x=axes.x;
+//                     axes.y=axes.y;
+//                      return axes;
 
-struct axis_state axes(){
+//                 break;
+//             default:
+//                 /* Ignore init events. */
+//                 break;
+//         }
+        
+//         fflush(stdout);
+//     }
 
-    struct joystickState state;
+//     close(js);
+
+// }
+
+struct axis_state jsevent(){
     struct js_event event;
-    struct axis_state axes;
-    size_t axis;
-
+    // struct buttons button;
+    struct axis_state jsbtn;
     int js;
 
     js = open("/dev/input/js0", O_RDONLY);
-
-    while (true)
+    while (read_event(js, &event) ==0)
     {
-    read_event(js, &event) 
-    close(js);
 
-
+        // printf("helloss");
         switch (event.type)
         {
             case JS_EVENT_BUTTON:
+            // printf(event.value);
                 printf("Button %u %s\n", event.number, event.value ? "pressed" : "released");
-                axes.axis=event.number;
-                axes.x=event.value;
+                jsbtn.axis=event.number;
+                if (event.value)
+                    jsbtn.x =event.value ? 1:0;
+                else
+                    jsbtn.x=0;
+                // jsbtn.x=event.value ? 1:0;                
+                jsbtn.y=-1;    
+                return jsbtn;        
 
-                axes.y=-1;
-                return axes;
-                
                 break;
             case JS_EVENT_AXIS:
-                axes = get_axis_state(&event, axes);
+                jsbtn = get_axis_state(&event, jsbtn);
                 
-                if (axes.axis < 3)
-                    // printf("Axis %zu at (%6d, %6d)\n", axes.axis, axes.x, axes.y);
-                    // printf("Axis %zu \n",axis);
-                    axes.axis=axes.axis;
-                    axes.x=axes.x;
-                    axes.y=axes.y;
-
-                    // state.axis=axes.axis;
-                    // state.x=axes.x;
-                    // state.y=axes.y;
-                    // state.number=0;
-                    // state.value=0;
-                    
-                
-                    // state.state=1;
-                    return axes;
-
+                if (jsbtn.axis < 3)
+                    // printf("Axis (%6d, %6d)\n", jsbtn.x, jsbtn.y);
+                    jsbtn.axis=jsbtn.axis;
+                    jsbtn.x=jsbtn.x;
+                    jsbtn.y=jsbtn.y;
+                    return jsbtn;
                 break;
             default:
-                /* Ignore init events. */
-                axes.axis=-1;
-                axes.x=-1;
-                axes.y=-1;
-                return button;
+
                 break;
         }
-        
+
         fflush(stdout);
     }
-
-    // close(js);
-
-}
-
-struct buttons button(){
-    struct js_event event;
-    struct buttons button;
-
-    // struct axis_state axes[3] = {0};
-    // size_t axis;
-
-    int js;
-
-    js = open("/dev/input/js0", O_RDONLY);
-    // js = open("/dev/input/js0", O_RDONLY);
-    
-    // while (read_event(js, &event) == 0)
-    while (true)
-    {
-    read_event(js, &event)
     close(js);
-    printf("Button %u %s\n", event.number, event.value ? "pressed" : "released");
-               
-        // printf(js);
-        switch (event.type)
-        {
-            case JS_EVENT_BUTTON:
-                printf("Button %u %s\n", event.number, event.value ? "pressed" : "released");
-                button.number=event.number;
-                button.value=event.value;
-                return button;
-                
-                
-                break;
-            // case JS_EVENT_AXIS:
-            //     axis = get_axis_state(&event, axes);
-            //     // if (axis < 3)
-            //     //     printf("Axis %zu at (%6d, %6d)\n", axis, axes[axis].x, axes[axis].y);
-            //     button.number=0;
-            //     button.value=0;
-            //     return button;
-            //     break;
-            default:
-                /* Ignore init events. */
-                button.number=-1;
-                button.number=-1;
-                return button;
-                break;
-        }
-        
-        fflush(stdout);
-    }
 
 }
 
-int main()
+// size_t get_axis_state(struct js_event *event, struct axis_state axes[3])
+// {
+//     size_t axis = event->number / 2;
+
+//     if (axis < 3)
+//     {
+//         if (event->number % 2 == 0)
+//             axes[axis].x = event->value;
+//         else
+//             axes[axis].y = event->value;
+//     }
+
+//     return axis;
+// }
+
+int main(int argc, char *argv[])
 {
-    printf("%s\n", hello_world());
-    char* backwards = "backwards";
-    printf("%s reversed is %s\n", backwards, reverse(backwards, 9444));
-
-    struct Coordinate coord = create_coordinate(3.5777, 4.68888);
-    printf("Coordinate is lat %.2f, long %.2f\n", coord.latitude, coord.longitude);
-
-    struct Place place = create_place("My Home Turkey", 42.0, 24.0);
-    printf("The name of my place is %s at %.2f, %.2f\n", place.name, place.coordinate.latitude, place.coordinate.longitude);
-
-    return 0;
 }
 
 char *hello_world()
 {
     return "Hello World Dunya";
-}
-
-
-char *reverse(char *str, int length)
-{
-    // Allocates native memory in C.
-    char *reversed_str = (char *)malloc((length + 1) * sizeof(char));
-    for (int i = 0; i < length; i++)
-    {
-        reversed_str[length - i - 1] = str[i];
-    }
-    reversed_str[length] = '\0';
-    return reversed_str;
-}
-
-void free_string(char *str)
-{
-    // Free native memory in C which was allocated in C.
-    free(str);
-}
-
-struct Coordinate create_coordinate(double latitude, double longitude)
-{
-    struct Coordinate coordinate;
-    coordinate.latitude = latitude;
-    coordinate.longitude = longitude;
-    return coordinate;
-}
-
-struct Place create_place(char *name, double latitude, double longitude)
-{
-    struct Place place;
-    place.name = name;
-    place.coordinate = create_coordinate(latitude, longitude);
-    return place;
-}
-
-double distance(struct Coordinate c1, struct Coordinate c2) {
-    double xd = c2.latitude - c1.latitude;
-    double yd = c2.longitude - c1.longitude;
-    return sqrt(xd*xd + yd*yd);
 }
 
