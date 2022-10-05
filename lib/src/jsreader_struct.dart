@@ -30,6 +30,9 @@ class Axes extends Struct {
 
   @Int()
   external int y;
+
+  @Int()
+  external int type;
 }
 
 // class JoystickState extends Struct {
