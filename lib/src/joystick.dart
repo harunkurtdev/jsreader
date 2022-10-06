@@ -58,7 +58,6 @@ class JoystickButton extends getJoystick {
       if (this._createButton().type == 1) {
         this._jsButton.number = this._createButton().axis;
         this.._jsButton.value = this._createButton().x;
-        this.._jsButton.valuey = this._createButton().y;
         _streamButtonControl.add(this._jsButton);
       } else {
         this._jsAxes.axis = this._createButton().axis;
