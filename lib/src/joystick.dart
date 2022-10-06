@@ -80,7 +80,11 @@ class JoystickButton extends getJoystick {
 class getJoystick {
   late DynamicLibrary joystickLib;
   getJoystick() {
-    var libraryPath = path.join('tool/structs_library/build', 'libstructs.so');
+    print(path.current.toString().replaceAll(RegExp("example"), ""));
+    var libraryPath = path.join(
+        path.current.toString().replaceAll(RegExp("example"), "").toString(),
+        'lib/src/tool/structs_library/build',
+        'libstructs.so');
     if (Platform.isMacOS) {
       libraryPath = path.join(
           Directory.current.path, 'structs_library', 'libstructs.dylib');
