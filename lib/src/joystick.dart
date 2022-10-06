@@ -14,6 +14,7 @@ import 'package:async/async.dart' show StreamGroup;
 class JSButton {
   late int number;
   late int value;
+  late int valuey;
 
   @override
   String toString() {
@@ -34,21 +35,16 @@ class JSAxes {
   }
 }
 
-class USBJoystcik extends getJoystickFunc {
-  Stream<dynamic> get listenButton => _streamControl.stream;
-}
-
-class getJoystickFunc extends getJoystickLib {
+class JoystickButton extends getJoystick {
   // final buttons = createButton();
 
   late dynamic _createButton;
   late JSButton _jsButton;
-  late JSAxes _jsAxes;
   late int number;
   late int value;
   late StreamController<JSButton> _streamControl;
 
-  getJoystickFunc() {
+  JoystickButton() {
     this._createButton = this
         .joystickLib
         .lookupFunction<CreateAxesNative, CreateAxes>('jsevent');
@@ -58,18 +54,20 @@ class getJoystickFunc extends getJoystickLib {
     Timer.periodic(Duration(milliseconds: 1), (timer) {
       this._jsButton.number = this._createButton().axis;
       this.._jsButton.value = this._createButton().x;
-      // this.._jsButton.valuey = this._createButton().y;
-      // print();
+      this.._jsButton.valuey = this._createButton().y;
+      print(this._createButton().type);
       _streamControl.add(this._jsButton);
+      // }
     });
   }
+
+  Stream<JSButton> get listenButton => _streamControl.stream;
 }
 
-class getJoystickLib {
+class getJoystick {
   late DynamicLibrary joystickLib;
-  getJoystickLib() {
-    var libraryPath =
-        path.join('./tool/structs_library/build', 'libstructs.so');
+  getJoystick() {
+    var libraryPath = path.join('tool/structs_library/build', 'libstructs.so');
     if (Platform.isMacOS) {
       libraryPath = path.join(
           Directory.current.path, 'structs_library', 'libstructs.dylib');
@@ -86,9 +84,9 @@ typedef jsDevice = Pointer<Utf8> Function();
 
 void main() {
   // var joystickAxes = JoystickAxes();
-  var joystick = USBJoystcik();
+  var joystickButton = JoystickButton();
 
-  joystick.listenButton.listen((event) {
+  joystickButton.listenButton.listen((event) {
     print(event.toString());
   });
 }

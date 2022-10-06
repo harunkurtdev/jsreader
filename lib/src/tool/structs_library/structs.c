@@ -86,26 +86,34 @@ struct axis_state jsevent(){
             // printf(event.value);
                 // printf(&event->value);
                 // int c=;
+                  
+                // printf("Button %u %d\n", event.number, c);
+                // printf("%d",(event.value ? 1 : 0));
                 jsbtn.axis=event.number;
                 jsbtn.type=JS_EVENT_BUTTON;
-                jsbtn.y=-1;    
-
-                // printf("Button %u %d\n", event.number, c);
+                jsbtn.y=-1;
+                
+                
                 if((event.value ? 1 : 0)==1){
-                    jsbtn.x=1;
-                    printf("girdi");
-                    // return jsbtn;
+                      
+                    printf("girdi \n");
+                    jsbtn.x=1<<0;
+
+                    printf("\n %u number , %d x \n",(event.value ? 1 : 0),jsbtn.x);
+                    return jsbtn;
                     // fflush(stdout);
+                    // break;
 
                 }
                 else{
-                    printf("cikti");
+                  
                     jsbtn.x=0;
+                    // printf("girdi");
+                    printf("\n %u number , %d x \n",(event.value ? 1 : 0),jsbtn.x);
 
-                }
-                
                     return jsbtn;
-                 
+                    break;
+                }
                 break;
             case JS_EVENT_AXIS:
                 jsbtn = get_axis_state(&event, jsbtn);
@@ -120,6 +128,8 @@ struct axis_state jsevent(){
                 break;
             default:
                     fflush(stdout);
+                // break;
+                // close(js);
 
                 break;
         }
