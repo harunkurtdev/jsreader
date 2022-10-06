@@ -42,16 +42,20 @@ class JoystickButton extends getJoystick {
   late JSButton _jsButton;
   late int number;
   late int value;
-  late StreamController<JSButton> _streamControl;
+  late StreamController<JSButton> _streamButtonControl;
+  late StreamController<JSAxes> _streamAxesControl;
 
   JoystickButton() {
     this._createButton = this
         .joystickLib
         .lookupFunction<CreateAxesNative, CreateAxes>('jsevent');
     this._jsButton = JSButton();
-    this._streamControl = StreamController();
+    this._streamButtonControl = StreamController();
+    this._streamAxesControl = StreamController();
 
     Timer.periodic(Duration(milliseconds: 1), (timer) {
+      if (this._createButton().type == 1) {
+      } else {}
       this._jsButton.number = this._createButton().axis;
       this.._jsButton.value = this._createButton().x;
       this.._jsButton.valuey = this._createButton().y;
