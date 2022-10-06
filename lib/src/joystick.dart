@@ -40,6 +40,7 @@ class JoystickButton extends getJoystick {
 
   late dynamic _createButton;
   late JSButton _jsButton;
+  late JSAxes _jsAxes;
   late int number;
   late int value;
   late StreamController<JSButton> _streamButtonControl;
@@ -55,13 +56,16 @@ class JoystickButton extends getJoystick {
 
     Timer.periodic(Duration(milliseconds: 1), (timer) {
       if (this._createButton().type == 1) {
-      } else {}
-      this._jsButton.number = this._createButton().axis;
-      this.._jsButton.value = this._createButton().x;
-      this.._jsButton.valuey = this._createButton().y;
-      print(this._createButton().type);
-      _streamControl.add(this._jsButton);
-      // }
+        this._jsButton.number = this._createButton().axis;
+        this.._jsButton.value = this._createButton().x;
+        this.._jsButton.valuey = this._createButton().y;
+        _streamButtonControl.add(this._jsButton);
+      } else {
+        this._jsAxes.axis = this._createButton().axis;
+        this.._jsAxes.x = this._createButton().x;
+        this.._jsAxes.y = this._createButton().y;
+        _streamAxesControl.add(this._jsAxes);
+      }
     });
   }
 
