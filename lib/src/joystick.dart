@@ -69,7 +69,8 @@ class JoystickButton extends getJoystick {
     });
   }
 
-  Stream<JSButton> get listenButton => _streamControl.stream;
+  Stream<JSButton> get listenButton => this._streamButtonControl.stream;
+  Stream<JSAxes> get listenAxes => this._streamAxesControl.stream;
 }
 
 class getJoystick {
@@ -95,6 +96,9 @@ void main() {
   var joystickButton = JoystickButton();
 
   joystickButton.listenButton.listen((event) {
+    print(event.toString());
+  });
+  joystickButton.listenAxes.listen((event) {
     print(event.toString());
   });
 }
