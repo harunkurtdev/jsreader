@@ -14,12 +14,11 @@ import 'package:async/async.dart' show StreamGroup;
 class JSButton {
   late int number;
   late int value;
-  late int valuey;
 
   @override
   String toString() {
     // TODO: implement toString
-    return "Joystick is button number ${this.number} and value ${this.value}, valuey ${this.valuey}";
+    return "Joystick is button number ${this.number} and value ${this.value}";
   }
 }
 
@@ -51,19 +50,25 @@ class JoystickButton extends getJoystick {
         .joystickLib
         .lookupFunction<CreateAxesNative, CreateAxes>('jsevent');
     this._jsButton = JSButton();
+    this._jsAxes = JSAxes();
     this._streamButtonControl = StreamController();
     this._streamAxesControl = StreamController();
 
     Timer.periodic(Duration(milliseconds: 1), (timer) {
+      print(this._createButton().type);
       if (this._createButton().type == 1) {
         this._jsButton.number = this._createButton().axis;
         this.._jsButton.value = this._createButton().x;
         _streamButtonControl.add(this._jsButton);
       } else {
-        this._jsAxes.axis = this._createButton().axis;
-        this.._jsAxes.x = this._createButton().x;
-        this.._jsAxes.y = this._createButton().y;
-        _streamAxesControl.add(this._jsAxes);
+        try {
+          this._jsAxes.axis = this._createButton().axis;
+          this.._jsAxes.x = this._createButton().x;
+          this.._jsAxes.y = this._createButton().y;
+          _streamAxesControl.add(this._jsAxes);
+        } catch (e) {
+          print(e.toString());
+        }
       }
     });
   }
