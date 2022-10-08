@@ -6,7 +6,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-// #include "structs.h"
 
 
 #include <fcntl.h>
@@ -83,12 +82,6 @@ struct axis_state jsevent(){
         switch (event.type)
         {
             case JS_EVENT_BUTTON:
-            // printf(event.value);
-                // printf(&event->value);
-                // int c=;
-                  
-                // printf("Button %u %d\n", event.number, c);
-                // printf("%d",(event.value ? 1 : 0));
                 jsbtn.axis=event.number;
                 jsbtn.type=JS_EVENT_BUTTON;
                 jsbtn.y=-1;
@@ -119,7 +112,6 @@ struct axis_state jsevent(){
                 jsbtn = get_axis_state(&event, jsbtn);
                 
                 if (jsbtn.axis < 3)
-                    // printf("Axis (%6d, %6d)\n", jsbtn.x, jsbtn.y);
                     jsbtn.axis=jsbtn.axis;
                     jsbtn.x=jsbtn.x;
                     jsbtn.y=jsbtn.y;
@@ -158,6 +150,8 @@ struct axis_state jsevent(){
 
 int main(int argc, char *argv[])
 {
+    
+    
 }
 
 char *hello_world()

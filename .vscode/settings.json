@@ -1,0 +1,6 @@
+{
+    "cmake.sourceDirectory": "${workspaceFolder}/lib/src/tool/structs_library",
+    "files.associations": {
+        "stdlib.h": "c"
+    }
+}
