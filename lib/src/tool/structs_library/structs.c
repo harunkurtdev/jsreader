@@ -124,16 +124,16 @@ struct axis_state jsevent(){
 
 int main(int argc, char *argv[])
 {
-    struct axis_state axis;
+    // struct axis_state axis;
 
-    while (1)
-    {
+    // while (1)
+    // {
 
-        axis=jsevent();
+    //     axis=jsevent();
 
-        printf("%d %d %d %d ",axis.axis,axis.type,axis.x,axis.y);
+    //     printf("%d %d %d %d ",axis.axis,axis.type,axis.x,axis.y);
     
-    }
+    // }
     
 
     
