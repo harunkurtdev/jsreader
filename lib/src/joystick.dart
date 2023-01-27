@@ -8,7 +8,6 @@ import 'dart:ffi';
 import 'package:ffi/ffi.dart';
 import 'dart:io' show Directory, Platform;
 
-import 'package:async/async.dart' show StreamGroup;
 // Directory.current.path,
 
 class JSButton {
