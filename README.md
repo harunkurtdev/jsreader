@@ -11,9 +11,6 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages). 
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
 ## Gamepad Josytick Reader
 
 This package allows you to quickly take your data for your android or ios applications from the keys of usb supported gamepads.
